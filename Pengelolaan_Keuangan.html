@@ -1,0 +1,1588 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pengelolaan Keuangan – Kelompok 8</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #5b6ef5;
+        --primary-dark: #3d52d5;
+        --accent: #f5a623;
+        --accent2: #2ed9a3;
+        --bg: #f7f8ff;
+        --card: #ffffff;
+        --text: #1a1d3a;
+        --muted: #7b7f9e;
+        --border: #e8eaff;
+        --correct: #2ed9a3;
+        --wrong: #f56b6b;
+        --shadow: 0 4px 24px rgba(91, 110, 245, 0.1);
+        --shadow-lg: 0 12px 40px rgba(91, 110, 245, 0.16);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: rgba(247, 248, 255, 0.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+      }
+      .nav-logo {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: -0.5px;
+      }
+      .nav-logo span {
+        color: var(--accent);
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 100px 2rem 60px;
+        background: linear-gradient(
+          135deg,
+          #eef0ff 0%,
+          #f7f8ff 50%,
+          #eafff8 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(91, 110, 245, 0.12) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        left: -80px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(46, 217, 163, 0.1) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 760px;
+      }
+      .hero-badge {
+        display: inline-block;
+        background: rgba(91, 110, 245, 0.1);
+        color: var(--primary);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 16px;
+        border-radius: 100px;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(91, 110, 245, 0.2);
+      }
+      .hero h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(2.8rem, 6vw, 4.8rem);
+        font-weight: 800;
+        color: var(--text);
+        line-height: 1.1;
+        margin-bottom: 1.2rem;
+      }
+      .hero h1 .accent {
+        color: var(--primary);
+      }
+      .hero p {
+        font-size: 1.15rem;
+        color: var(--muted);
+        max-width: 540px;
+        margin: 0 auto 2.5rem;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.25s;
+        display: inline-block;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(91, 110, 245, 0.35);
+      }
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(91, 110, 245, 0.4);
+      }
+      .btn-secondary {
+        background: #fff;
+        color: var(--primary);
+        border: 2px solid var(--border);
+      }
+      .btn-secondary:hover {
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .stats {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 3rem;
+      }
+      .stat-item {
+        text-align: center;
+      }
+      .stat-num {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .stat-label {
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      section {
+        padding: 80px 2rem;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 0.75rem;
+      }
+      .section-title {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .section-desc {
+        color: var(--muted);
+        max-width: 560px;
+        font-size: 1.05rem;
+        margin-bottom: 3rem;
+      }
+
+      .materi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+      .materi-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .materi-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+      }
+      .materi-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--accent2));
+        border-radius: 20px 20px 0 0;
+      }
+      .card-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        margin-bottom: 1.2rem;
+      }
+      .icon-blue {
+        background: rgba(91, 110, 245, 0.1);
+      }
+      .icon-green {
+        background: rgba(46, 217, 163, 0.1);
+      }
+      .icon-orange {
+        background: rgba(245, 166, 35, 0.1);
+      }
+      .icon-red {
+        background: rgba(245, 107, 107, 0.1);
+      }
+      .icon-purple {
+        background: rgba(155, 89, 182, 0.1);
+      }
+      .icon-teal {
+        background: rgba(22, 160, 133, 0.1);
+      }
+
+      .materi-card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+      }
+      .materi-card p {
+        color: var(--muted);
+        font-size: 0.93rem;
+        line-height: 1.6;
+      }
+      .materi-card ul {
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding-left: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .materi-card ul li {
+        margin-bottom: 0.35rem;
+      }
+
+      .compare-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+      .compare-card {
+        border-radius: 20px;
+        padding: 2rem;
+        border: 2px solid;
+      }
+      .compare-kebutuhan {
+        background: rgba(91, 110, 245, 0.05);
+        border-color: rgba(91, 110, 245, 0.2);
+      }
+      .compare-keinginan {
+        background: rgba(245, 166, 35, 0.05);
+        border-color: rgba(245, 166, 35, 0.2);
+      }
+      .compare-card h3 {
+        font-size: 1.3rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+      .compare-kebutuhan h3 {
+        color: var(--primary);
+      }
+      .compare-keinginan h3 {
+        color: var(--accent);
+      }
+      .compare-tag {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 100px;
+        margin-bottom: 1rem;
+      }
+      .tag-blue {
+        background: rgba(91, 110, 245, 0.12);
+        color: var(--primary);
+      }
+      .tag-orange {
+        background: rgba(245, 166, 35, 0.12);
+        color: var(--accent);
+      }
+      .compare-card p {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .compare-card ul {
+        padding-left: 1.2rem;
+        margin-top: 0.8rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .compare-card ul li {
+        margin-bottom: 0.4rem;
+      }
+
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.2rem;
+      }
+      .tip-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        transition: transform 0.3s;
+      }
+      .tip-card:hover {
+        transform: translateY(-4px);
+      }
+      .tip-num {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--primary);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      .tip-card h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+      }
+      .tip-card p {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .jenis-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+      .jenis-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.2rem 1.8rem;
+        box-shadow: var(--shadow);
+        text-align: center;
+        transition: all 0.3s;
+      }
+      .jenis-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+      }
+      .jenis-emoji {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      .jenis-card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+      }
+      .jenis-card p {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .section-alt {
+        background: #fff;
+      }
+      .section-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, #3d52d5 100%);
+        color: #fff;
+      }
+      .section-primary .section-label {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .section-primary .section-title {
+        color: #fff;
+      }
+      .section-primary .section-desc {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      #quiz {
+        background: #fff;
+      }
+      .quiz-wrapper {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      .quiz-progress {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 2rem;
+      }
+      .progress-dot {
+        height: 6px;
+        flex: 1;
+        border-radius: 100px;
+        background: var(--border);
+        transition: background 0.3s;
+      }
+      .progress-dot.active {
+        background: var(--primary);
+      }
+      .progress-dot.done {
+        background: var(--accent2);
+      }
+
+      .quiz-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: var(--shadow);
+        animation: fadeIn 0.4s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .quiz-num {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 0.8rem;
+      }
+      .quiz-question {
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.4;
+        margin-bottom: 1.8rem;
+        color: var(--text);
+      }
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+      }
+      .quiz-option {
+        padding: 1.1rem 1.4rem;
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        cursor: pointer;
+        font-size: 0.97rem;
+        font-weight: 500;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #fff;
+        color: var(--text);
+        transition: all 0.2s;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .quiz-option .opt-label {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--border);
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
+      .quiz-option:hover:not(:disabled) {
+        border-color: var(--primary);
+        background: rgba(91, 110, 245, 0.04);
+      }
+      .quiz-option:hover:not(:disabled) .opt-label {
+        background: var(--primary);
+        color: #fff;
+      }
+      .quiz-option.correct {
+        border-color: var(--correct);
+        background: rgba(46, 217, 163, 0.08);
+        color: #1a4a3a;
+      }
+      .quiz-option.correct .opt-label {
+        background: var(--correct);
+        color: #fff;
+      }
+      .quiz-option.wrong {
+        border-color: var(--wrong);
+        background: rgba(245, 107, 107, 0.08);
+        color: #4a1a1a;
+      }
+      .quiz-option.wrong .opt-label {
+        background: var(--wrong);
+        color: #fff;
+      }
+      .quiz-option:disabled {
+        cursor: default;
+      }
+
+      .quiz-feedback {
+        margin-top: 1.5rem;
+        padding: 1rem 1.4rem;
+        border-radius: 12px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        display: none;
+      }
+      .quiz-feedback.show {
+        display: block;
+      }
+      .quiz-feedback.correct {
+        background: rgba(46, 217, 163, 0.12);
+        color: #0d7a5a;
+        border: 1px solid rgba(46, 217, 163, 0.25);
+      }
+      .quiz-feedback.wrong {
+        background: rgba(245, 107, 107, 0.1);
+        color: #b92c2c;
+        border: 1px solid rgba(245, 107, 107, 0.25);
+      }
+
+      .quiz-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+      }
+      .quiz-score-display {
+        font-size: 0.85rem;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      /* RESULT */
+      .quiz-result {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: var(--card);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        display: none;
+      }
+      .quiz-result.show {
+        display: block;
+        animation: fadeIn 0.4s ease;
+      }
+      .result-score {
+        font-size: 5rem;
+        font-weight: 800;
+        color: var(--primary);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      .result-total {
+        color: var(--muted);
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .result-msg {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .result-sub {
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+
+      /* MEMBER SECTION */
+      .member-section {
+        background: linear-gradient(135deg, #1a1d3a 0%, #2d325a 100%);
+        padding: 80px 2rem;
+        text-align: center;
+      }
+      .member-section .section-label {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .member-section .section-title {
+        color: #fff;
+        text-align: center;
+      }
+      .member-section .section-title-top {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+      }
+      .pengelolaan-title {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+      .kelompok-label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.4);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 3rem;
+      }
+      .members-grid {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .member-card {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem 2.5rem;
+        transition: all 0.3s;
+        min-width: 220px;
+      }
+      .member-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(91, 110, 245, 0.4);
+        transform: translateY(-4px);
+      }
+      .member-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        margin: 0 auto 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #fff;
+      }
+      .av-1 {
+        background: linear-gradient(135deg, var(--primary), #7c8ff5);
+      }
+      .av-2 {
+        background: linear-gradient(135deg, var(--accent), #f5c85a);
+      }
+      .av-3 {
+        background: linear-gradient(135deg, var(--accent2), #1ab88a);
+      }
+      .member-num {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 0.4rem;
+      }
+      .member-name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      /* VIDEO SECTION */
+      .video-section {
+        background: linear-gradient(135deg, #eef0ff 0%, #f7f8ff 50%, #eafff8 100%);
+      }
+      .video-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .video-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 ratio */
+        height: 0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        border: 3px solid var(--border);
+      }
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 17px;
+      }
+      .video-caption {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1.2rem;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem 1.4rem;
+        box-shadow: var(--shadow);
+      }
+      .video-caption-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(91, 110, 245, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .video-caption-text h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.1rem;
+      }
+      .video-caption-text p {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      /* FOOTER */
+      footer {
+        background: #0f1128;
+        color: rgba(255, 255, 255, 0.4);
+        text-align: center;
+        padding: 2rem;
+        font-size: 0.85rem;
+      }
+      footer span {
+        color: var(--primary);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .jenis-grid {
+          grid-template-columns: 1fr;
+        }
+        .compare-wrapper {
+          grid-template-columns: 1fr;
+        }
+        .quiz-card {
+          padding: 1.5rem;
+        }
+      }
+
+      /* Scroll animation */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">💰 <span>Keuangan</span>Pintar</div>
+      <ul class="nav-links">
+        <li><a href="#pengertian">Pengertian</a></li>
+        <li><a href="#jenis">Jenis</a></li>
+        <li><a href="#materi">Materi</a></li>
+        <li><a href="#tips">Tips</a></li>
+        <li><a href="#video">Video</a></li>
+        <li><a href="#quiz">Kuis</a></li>
+        <li><a href="#anggota">Anggota</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">📚 Materi Ekonomi — Kelompok 8</div>
+        <h1>Pengelolaan<br /><span class="accent">Keuangan</span></h1>
+        <p>
+          Pelajari cara mengelola keuangan dengan bijak — dari keluarga,
+          perusahaan, hingga negara. Lengkap dengan materi interaktif dan kuis
+          seru!
+        </p>
+        <div class="hero-btns">
+          <a href="#materi" class="btn btn-primary">📖 Mulai Belajar</a>
+          <a href="#quiz" class="btn btn-secondary">🧠 Ikuti Kuis</a>
+        </div>
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Jenis Pengelolaan</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">6</div>
+            <div class="stat-label">Topik Materi</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">10</div>
+            <div class="stat-label">Soal Kuis</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PENGERTIAN -->
+    <section id="pengertian" class="section-alt">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">01 — Dasar</div>
+          <h2 class="section-title">Apa itu Pengelolaan Keuangan?</h2>
+          <p class="section-desc">
+            Pengelolaan keuangan adalah proses merencanakan, mengorganisir,
+            mengarahkan, dan mengendalikan penggunaan uang secara efektif dan
+            efisien untuk mencapai tujuan tertentu.
+          </p>
+        </div>
+        <div class="materi-grid reveal">
+          <div class="materi-card">
+            <div class="card-icon icon-blue">📋</div>
+            <h3>Definisi</h3>
+            <p>
+              Pengelolaan keuangan mencakup segala aktivitas yang berkaitan
+              dengan bagaimana uang diperoleh, digunakan, dan diawasi agar
+              tujuan finansial dapat tercapai secara optimal.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-green">🎯</div>
+            <h3>Tujuan Utama</h3>
+            <p>
+              Memastikan pemasukan dan pengeluaran seimbang, memiliki dana
+              darurat, mampu berinvestasi, dan mencapai kebebasan finansial
+              jangka panjang.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-orange">⭐</div>
+            <h3>Manfaat Mengelola Keuangan</h3>
+            <ul>
+              <li>Lebih teratur dalam pengeluaran</li>
+              <li>Hemat dan tidak cepat habis</li>
+              <li>Siap menghadapi keadaan darurat</li>
+              <li>Bisa menabung dan berinvestasi</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JENIS -->
+    <section id="jenis">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">02 — Klasifikasi</div>
+          <h2 class="section-title">Jenis-Jenis Pengelolaan Keuangan</h2>
+          <p class="section-desc">
+            Pengelolaan keuangan dibedakan menjadi tiga jenis berdasarkan ruang
+            lingkupnya.
+          </p>
+        </div>
+        <div class="jenis-grid reveal">
+          <div class="jenis-card">
+            <div class="jenis-emoji">🏠</div>
+            <h3>Pengelolaan Keuangan Keluarga</h3>
+            <p>
+              Mengatur pendapatan dan pengeluaran rumah tangga agar kebutuhan
+              keluarga terpenuhi, tabungan bertambah, dan tidak berhutang
+              berlebihan.
+            </p>
+          </div>
+          <div class="jenis-card">
+            <div class="jenis-emoji">🏢</div>
+            <h3>Pengelolaan Keuangan Perusahaan</h3>
+            <p>
+              Mengelola aset, modal, dan arus kas perusahaan agar bisnis
+              berjalan lancar, menguntungkan, dan dapat berkembang secara
+              berkelanjutan.
+            </p>
+          </div>
+          <div class="jenis-card">
+            <div class="jenis-emoji">🇮🇩</div>
+            <h3>Pengelolaan Keuangan Negara</h3>
+            <p>
+              Pemerintah mengatur APBN (Anggaran Pendapatan dan Belanja Negara)
+              untuk membiayai pembangunan, layanan publik, dan kepentingan
+              rakyat.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEBUTUHAN vs KEINGINAN -->
+    <section id="materi" class="section-alt">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">03 — Prioritas</div>
+          <h2 class="section-title">Kebutuhan vs Keinginan</h2>
+          <p class="section-desc">
+            Kunci pengelolaan keuangan yang baik adalah memahami perbedaan
+            antara kebutuhan dan keinginan.
+          </p>
+        </div>
+        <div class="compare-wrapper reveal">
+          <div class="compare-card compare-kebutuhan">
+            <h3>🍜 Kebutuhan</h3>
+            <span class="compare-tag tag-blue">HAL PENTING</span>
+            <p>
+              Sesuatu yang <strong>harus dipenuhi</strong> agar bisa bertahan
+              hidup dan menjalani kehidupan sehari-hari dengan layak.
+            </p>
+            <ul>
+              <li>Makanan dan minuman</li>
+              <li>Tempat tinggal / rumah</li>
+              <li>Air bersih</li>
+              <li>Listrik</li>
+              <li>Pakaian</li>
+              <li>Pendidikan & kesehatan</li>
+            </ul>
+          </div>
+          <div class="compare-card compare-keinginan">
+            <h3>📱 Keinginan</h3>
+            <span class="compare-tag tag-orange">BISA DITUNDA</span>
+            <p>
+              Sesuatu yang <strong>ingin dimiliki</strong> tapi tidak mendesak.
+              Bisa dibeli kapan saja bila keuangan memungkinkan.
+            </p>
+            <ul>
+              <li>Gadget terbaru</li>
+              <li>Mainan koleksi</li>
+              <li>Liburan mewah</li>
+              <li>Mesin roti 500 juta 😄</li>
+              <li>Baju branded</li>
+              <li>Aksesoris tambahan</li>
+            </ul>
+          </div>
+        </div>
+        <div
+          style="
+            margin-top: 2rem;
+            background: rgba(91, 110, 245, 0.06);
+            border: 1px solid rgba(91, 110, 245, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+          "
+          class="reveal"
+        >
+          <p
+            style="
+              color: var(--primary);
+              font-weight: 700;
+              margin-bottom: 0.5rem;
+            "
+          >
+            💡 Prinsip Utama
+          </p>
+          <p style="color: var(--muted)">
+            Dahulukan <strong>kebutuhan</strong> sebelum
+            <strong>keinginan</strong>. Pastikan seluruh kebutuhan pokok
+            terpenuhi terlebih dahulu sebelum menggunakan sisa uang untuk
+            keinginan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEBIH BANYAK MATERI -->
+    <section>
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">04 — Konsep Lanjutan</div>
+          <h2 class="section-title">Materi Pendalaman</h2>
+          <p class="section-desc">
+            Konsep penting lainnya yang perlu kamu pahami dalam mengelola
+            keuangan.
+          </p>
+        </div>
+        <div class="materi-grid reveal">
+          <div class="materi-card">
+            <div class="card-icon icon-purple">📊</div>
+            <h3>Anggaran (Budgeting)</h3>
+            <p>
+              Membuat rencana penggunaan uang sebelum dibelanjakan. Metode
+              populer: <strong>50/30/20</strong> — 50% kebutuhan, 30% keinginan,
+              20% tabungan.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-green">🏦</div>
+            <h3>Menabung</h3>
+            <p>
+              Menyisihkan sebagian penghasilan secara rutin. Prinsip:
+              <em>"Bayar diri sendiri terlebih dahulu"</em> — tabung sebelum
+              belanja, bukan sisanya.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-teal">📈</div>
+            <h3>Investasi</h3>
+            <p>
+              Menanamkan uang pada instrumen tertentu (emas, saham, reksa dana)
+              agar uang bekerja dan nilainya tumbuh seiring waktu.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-red">🚨</div>
+            <h3>Dana Darurat</h3>
+            <p>
+              Simpanan khusus untuk situasi tak terduga (sakit, PHK, bencana).
+              Idealnya 3–6 bulan pengeluaran bulanan sebagai cadangan.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-orange">💳</div>
+            <h3>Menghindari Hutang</h3>
+            <p>
+              Gunakan utang hanya untuk kebutuhan produktif. Hindari hutang
+              konsumtif yang bunganya tinggi dan tidak memberikan manfaat jangka
+              panjang.
+            </p>
+          </div>
+          <div class="materi-card">
+            <div class="card-icon icon-blue">🎓</div>
+            <h3>Literasi Keuangan</h3>
+            <p>
+              Kemampuan memahami dan menggunakan berbagai konsep keuangan.
+              Semakin tinggi literasi keuangan, semakin bijak dalam mengambil
+              keputusan finansial.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO ANIMASI -->
+    <section id="video" class="video-section">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">05 — Video Pembelajaran</div>
+          <h2 class="section-title">Video Animasi Materi</h2>
+          <p class="section-desc">
+            Tonton video animasi berikut untuk memahami konsep pengelolaan
+            keuangan secara visual dan menyenangkan.
+          </p>
+        </div>
+        <div class="video-wrapper reveal">
+          <div class="video-caption">
+            <div class="video-caption-icon">🎬</div>
+            <div class="video-caption-text">
+              <h4>Pengelolaan Keuangan — Video Animasi</h4>
+              <p>
+                <a href="https://youtu.be/ybrMJg8IIuw?si=L8Ku990D2FGf-kW_" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 600; text-decoration: none;">
+                  https://youtu.be/ybrMJg8IIuw?si=L8Ku990D2FGf-kW_
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIPS -->
+    <section id="tips" class="section-alt">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">06 — Panduan Praktis</div>
+          <h2 class="section-title">Tips Mengelola Keuangan</h2>
+          <p class="section-desc">
+            Langkah nyata yang bisa kamu terapkan mulai hari ini.
+          </p>
+        </div>
+        <div class="tips-grid reveal">
+          <div class="tip-card">
+            <div class="tip-num">1</div>
+            <div>
+              <h4>Catat Pemasukan & Pengeluaran</h4>
+              <p>
+                Tulis semua uang masuk dan keluar setiap hari agar kamu tahu ke
+                mana uangmu pergi.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">2</div>
+            <div>
+              <h4>Buat Anggaran Bulanan</h4>
+              <p>
+                Rencanakan pengeluaran di awal bulan sebelum uang habis tanpa
+                sengaja.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">3</div>
+            <div>
+              <h4>Pisahkan Kebutuhan & Keinginan</h4>
+              <p>
+                Selalu tanyakan: "Apakah ini kebutuhan atau keinginan?" sebelum
+                membeli.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">4</div>
+            <div>
+              <h4>Tabung Minimal 10–20%</h4>
+              <p>
+                Sisihkan minimal sepersepuluh penghasilan sebagai tabungan,
+                bukan dari sisa uang.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">5</div>
+            <div>
+              <h4>Siapkan Dana Darurat</h4>
+              <p>
+                Kumpulkan 3–6 bulan pengeluaran untuk menghadapi situasi tidak
+                terduga.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">6</div>
+            <div>
+              <h4>Hindari Pembelian Impulsif</h4>
+              <p>
+                Tunggu 24 jam sebelum membeli barang yang tidak direncanakan.
+                Sering kali, keinginan itu hilang sendiri.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">7</div>
+            <div>
+              <h4>Mulai Investasi Sejak Dini</h4>
+              <p>
+                Semakin cepat mulai, semakin besar manfaat bunga majemuk yang
+                kamu dapatkan.
+              </p>
+            </div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-num">8</div>
+            <div>
+              <h4>Evaluasi Rutin</h4>
+              <p>
+                Tinjau kondisi keuanganmu setiap bulan dan sesuaikan rencana
+                jika diperlukan.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">07 — Uji Pemahaman</div>
+          <h2 class="section-title">Kuis Interaktif 🧠</h2>
+          <p class="section-desc">
+            Uji pemahamanmu tentang Pengelolaan Keuangan dengan 10 soal berikut!
+          </p>
+        </div>
+        <div class="quiz-wrapper reveal">
+          <div class="quiz-progress" id="quizProgress">
+            <div class="progress-dot active" id="dot-0"></div>
+            <div class="progress-dot" id="dot-1"></div>
+            <div class="progress-dot" id="dot-2"></div>
+            <div class="progress-dot" id="dot-3"></div>
+            <div class="progress-dot" id="dot-4"></div>
+            <div class="progress-dot" id="dot-5"></div>
+            <div class="progress-dot" id="dot-6"></div>
+            <div class="progress-dot" id="dot-7"></div>
+            <div class="progress-dot" id="dot-8"></div>
+            <div class="progress-dot" id="dot-9"></div>
+          </div>
+          <div id="quizCard" class="quiz-card">
+            <!-- dynamically inserted -->
+          </div>
+          <div id="quizResult" class="quiz-result">
+            <div class="result-score" id="resultScore">0</div>
+            <div class="result-total" id="resultTotal">dari 10 soal benar</div>
+            <div class="result-msg" id="resultMsg"></div>
+            <div class="result-sub" id="resultSub"></div>
+            <button class="btn btn-primary" onclick="restartQuiz()">
+              🔄 Ulangi Kuis
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANGGOTA -->
+    <div id="anggota" class="member-section">
+      <div class="section-title-top">📚 Pengelolaan Keuangan</div>
+      <div class="pengelolaan-title">Pengelolaan Keuangan</div>
+      <div class="kelompok-label">Kelompok 8 · IPAS</div>
+      <div class="members-grid">
+        <div class="member-card">
+          <div class="member-avatar av-1">A</div>
+          <div class="member-num">Anggota 01</div>
+          <div class="member-name">Aldi Nugraha Wibowo</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar av-2">G</div>
+          <div class="member-num">Anggota 02</div>
+          <div class="member-name">Gabriela Sandra Wibisana</div>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar av-3">K</div>
+          <div class="member-num">Anggota 03</div>
+          <div class="member-name">Khuzama Wafa Ashilah</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        © 2026 Kelompok 8 · <span>Pengelolaan Keuangan</span> · Dibuat dengan ❤️
+      </p>
+    </footer>
+
+    <script>
+      // QUIZ DATA — 10 soal
+      const quizData = [
+        {
+          q: "Keinginan merupakan …",
+          opts: [
+            "Pengeluaran utama untuk hidup",
+            "Pengeluaran yang harus dipenuhi segera",
+            "Pengeluaran tambahan untuk kenyamanan",
+            "Pendapatan tetap",
+          ],
+          ans: 2,
+          exp: "✅ Benar! Keinginan adalah pengeluaran tambahan untuk kenyamanan yang baru dipenuhi setelah kebutuhan dasar terpenuhi.",
+        },
+        {
+          q: "Idealnya dana darurat dimiliki sebesar …",
+          opts: [
+            "1 hari pengeluaran",
+            "1 minggu pengeluaran",
+            "3–6 bulan pengeluaran rutin",
+            "10 tahun pengeluaran",
+          ],
+          ans: 2,
+          exp: "✅ Tepat! Dana darurat yang ideal adalah 3–6 bulan pengeluaran rutin agar siap menghadapi kondisi tak terduga.",
+        },
+        {
+          q: "Berikut yang termasuk aset adalah …",
+          opts: ["Utang pinjaman", "Rumah", "Cicilan", "Tagihan listrik"],
+          ans: 1,
+          exp: "✅ Benar! Rumah adalah aset karena merupakan kekayaan yang dimiliki. Utang, cicilan, dan tagihan adalah kewajiban.",
+        },
+        {
+          q: "Seseorang memiliki utang yang besar dibanding pendapatannya. Dampak yang paling mungkin terjadi adalah …",
+          opts: [
+            "Kondisi keuangan lebih stabil",
+            "Kesulitan memenuhi kebutuhan harian",
+            "Pengeluaran menjadi lebih kecil",
+            "Dana darurat otomatis bertambah",
+          ],
+          ans: 1,
+          exp: "✅ Tepat! Utang besar menguras pendapatan untuk cicilan, sehingga sisa uang tidak mencukupi kebutuhan harian.",
+        },
+        {
+          q: "Raka ingin membeli laptop baru karena teman-temannya sudah mengganti model terbaru, padahal laptop lamanya masih berfungsi baik. Tindakan Raka termasuk …",
+          opts: [
+            "Investasi",
+            "Kebutuhan primer",
+            "Pengeluaran produktif",
+            "Pengeluaran berdasarkan keinginan",
+          ],
+          ans: 3,
+          exp: "✅ Benar! Membeli barang yang masih berfungsi hanya karena mengikuti tren adalah pengeluaran berdasarkan keinginan (want), bukan kebutuhan.",
+        },
+        {
+          q: "Jika seseorang ingin membeli laptop untuk sekolah dalam beberapa bulan ke depan, langkah yang tepat adalah …",
+          opts: [
+            "Menghabiskan uang jajan setiap hari",
+            "Berutang kepada semua teman",
+            "Menabung secara rutin sesuai target",
+            "Membeli barang lain terlebih dahulu",
+          ],
+          ans: 2,
+          exp: "✅ Tepat! Menabung secara rutin sesuai target adalah cara yang disiplin dan sehat secara finansial untuk mencapai tujuan pembelian.",
+        },
+        {
+          q: "Jika seseorang ingin keuangannya stabil, maka ia harus …",
+          opts: [
+            "Mengutamakan keinginan daripada kebutuhan",
+            "Mengatur anggaran dengan disiplin",
+            "Menghabiskan uang saat menerima pemasukan",
+            "Sering membeli barang diskon yang tidak diperlukan",
+          ],
+          ans: 1,
+          exp: "✅ Benar! Mengatur anggaran dengan disiplin adalah kunci kestabilan keuangan jangka panjang.",
+        },
+        {
+          q: "Saat membuat anggaran keuangan, hal pertama yang harus diketahui adalah …",
+          opts: [
+            "Jumlah pemasukan dan pengeluaran",
+            "Harga barang mahal",
+            "Tempat belanja favorit",
+            "Banyaknya teman",
+          ],
+          ans: 0,
+          exp: "✅ Tepat! Anggaran dimulai dengan mengetahui total pemasukan dan pengeluaran agar dapat direncanakan dengan tepat.",
+        },
+        {
+          q: "Fungsi investasi dalam pengelolaan keuangan adalah …",
+          opts: [
+            "Mengurangi nilai uang",
+            "Membuat uang tidak dapat digunakan",
+            "Menambah pengeluaran harian",
+            "Membantu memperoleh keuntungan di masa depan",
+          ],
+          ans: 3,
+          exp: "✅ Benar! Investasi berfungsi menumbuhkan nilai uang sehingga memperoleh keuntungan di masa depan.",
+        },
+        {
+          q: "Dana darurat sebaiknya dipersiapkan sebelum melakukan investasi karena …",
+          opts: [
+            "Investasi selalu gagal",
+            "Dana darurat membantu menghadapi kebutuhan mendesak tanpa mengganggu investasi",
+            "Dana darurat hanya untuk orang dewasa",
+            "Investasi tidak membutuhkan uang",
+          ],
+          ans: 1,
+          exp: "✅ Tepat! Dana darurat menjadi jaring pengaman sehingga saat ada kebutuhan mendadak, investasi tidak perlu dicairkan.",
+        },
+      ];
+
+      const TOTAL = quizData.length;
+      let current = 0;
+      let score = 0;
+      let answered = false;
+
+      function renderQuiz() {
+        if (current >= TOTAL) {
+          showResult();
+          return;
+        }
+        answered = false;
+        const q = quizData[current];
+        const labels = ["A", "B", "C", "D"];
+        document.getElementById("quizCard").innerHTML = `
+      <div class="quiz-num">Soal ${current + 1} dari ${TOTAL}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts
+          .map(
+            (opt, i) => `
+          <button class="quiz-option" onclick="selectOption(${i})" id="opt-${i}">
+            <span class="opt-label">${labels[i]}</span>
+            ${opt}
+          </button>
+        `,
+          )
+          .join("")}
+      </div>
+      <div class="quiz-feedback" id="feedback"></div>
+      <div class="quiz-nav">
+        <div class="quiz-score-display">Skor: ${score} / ${current}</div>
+        <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn" style="display:none;">
+          ${current === TOTAL - 1 ? "🏁 Lihat Hasil" : "Soal Berikutnya →"}
+        </button>
+      </div>
+    `;
+        updateProgress();
+      }
+
+      function selectOption(idx) {
+        if (answered) return;
+        answered = true;
+        const q = quizData[current];
+        const btns = document.querySelectorAll(".quiz-option");
+        btns.forEach((b) => (b.disabled = true));
+
+        const feedback = document.getElementById("feedback");
+        if (idx === q.ans) {
+          score++;
+          btns[idx].classList.add("correct");
+          feedback.className = "quiz-feedback correct show";
+          feedback.textContent = q.exp;
+        } else {
+          btns[idx].classList.add("wrong");
+          btns[q.ans].classList.add("correct");
+          feedback.className = "quiz-feedback wrong show";
+          feedback.textContent = "❌ Kurang tepat. " + q.exp;
+        }
+        document.getElementById("nextBtn").style.display = "inline-block";
+      }
+
+      function nextQuestion() {
+        current++;
+        renderQuiz();
+      }
+
+      function updateProgress() {
+        for (let i = 0; i < TOTAL; i++) {
+          const dot = document.getElementById("dot-" + i);
+          if (!dot) continue;
+          if (i < current) dot.className = "progress-dot done";
+          else if (i === current) dot.className = "progress-dot active";
+          else dot.className = "progress-dot";
+        }
+      }
+
+      function showResult() {
+        document.getElementById("quizCard").style.display = "none";
+        const result = document.getElementById("quizResult");
+        result.classList.add("show");
+        document.getElementById("resultScore").textContent = score;
+        document.getElementById("resultTotal").textContent =
+          `dari ${TOTAL} soal benar`;
+
+        let msg, sub;
+        const pct = score / TOTAL;
+        if (pct === 1) {
+          msg = "🌟 Sempurna! Luar Biasa!";
+          sub =
+            "Kamu menguasai seluruh materi pengelolaan keuangan dengan sempurna!";
+        } else if (pct >= 0.8) {
+          msg = "👏 Hebat! Hampir Sempurna!";
+          sub = "Tinggal sedikit lagi! Pelajari kembali soal yang salah ya.";
+        } else if (pct >= 0.6) {
+          msg = "😊 Lumayan Bagus!";
+          sub =
+            "Kamu sudah cukup paham, tapi ada beberapa konsep yang perlu diperdalam.";
+        } else if (pct >= 0.4) {
+          msg = "📚 Perlu Belajar Lagi";
+          sub = "Jangan menyerah! Baca ulang materinya dan coba lagi.";
+        } else {
+          msg = "💪 Ayo Semangat!";
+          sub = "Pelajari materinya dari awal dan kamu pasti bisa lebih baik!";
+        }
+
+        document.getElementById("resultMsg").textContent = msg;
+        document.getElementById("resultSub").textContent = sub;
+        for (let i = 0; i < TOTAL; i++) {
+          const dot = document.getElementById("dot-" + i);
+          if (dot) dot.className = "progress-dot done";
+        }
+      }
+
+      function restartQuiz() {
+        current = 0;
+        score = 0;
+        document.getElementById("quizCard").style.display = "block";
+        document.getElementById("quizResult").classList.remove("show");
+        renderQuiz();
+      }
+
+      // SCROLL REVEAL
+      const revealEls = document.querySelectorAll(".reveal");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.12 },
+      );
+      revealEls.forEach((el) => obs.observe(el));
+
+      // INIT
+      renderQuiz();
+    </script>
+  </body>
+</html>
